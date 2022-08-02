@@ -1,0 +1,26 @@
+<html>
+    <head>
+    <meta charset="utf-8" />
+    <script src="wasm_exec.js"></script>
+    <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("json.wasm"),go.importObject).then((result)=>{
+    go.run(result.instance);
+    });
+    </script>
+    </head>
+    <body>
+    <textarea id="jsonInput" name="jsonInput" cols="80" rows="20"></textarea>
+    <input id="button" type="submit" value="Prettify JSON" onclick="json(jsonInput.value)" />
+    <textarea id="jsonOutput" name="jsonOutput" cols="80" rows="20"></textarea>
+    </body>
+    <script>
+    var json = function(input){
+    var result = formatJSON(input);
+    if((result != null) && ('wasmCustomError' in result)){
+    jsonOutput.value = "";
+    alert(result.wasmCustomError);
+    }
+    }
+    </script>
+</html>
